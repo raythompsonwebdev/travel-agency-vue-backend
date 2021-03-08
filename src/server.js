@@ -6,9 +6,6 @@ import history from "connect-history-api-fallback";
 const dotenv = require("dotenv");
 dotenv.config();
 
-//cartItems db
-//let cartItems = [bestdealitems[0], bestdealitems[2], bestdealitems[3]];
-
 const app = express();
 app.use(bodyParser.json());
 
@@ -26,8 +23,8 @@ app.use("/images", express.static(path.join(__dirname, "../assets")));
 //get all destinations and featured holiday for home page
 app.get("/api/home", async (req, res) => {
   const client = await MongoClient.connect(
-    process.env.MONGO_USER && process.env.MONGO_PASS
-      ? `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASS}@cluster0.aqewv.mongodb.net/${process.env.MONGO_DBNAME}?retryWrites=true&w=majority`
+    MONGO_USER && MONGO_PASS
+      ? `mongodb+srv://${MONGO_USER}:${MONGO_PASS}@cluster0.aqewv.mongodb.net/${MONGO_DBNAME}?retryWrites=true&w=majority`
       : "mongodb://localhost:27017",
     {
       useNewUrlParser: true,
