@@ -138,5 +138,5 @@ app.get("*", (req, res) => {
 
 //add conditional to determine whether to use localhost or remote server:
 app.listen(PORT || 8000, () => {
-  console.log(`server is listening ${process.env.PORT}`);
+  console.log(`server is listening ${PORT}`);
 });
