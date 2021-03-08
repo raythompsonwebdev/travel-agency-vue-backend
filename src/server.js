@@ -1,10 +1,14 @@
+require("dotenv").config({ path: ".env" });
+var PORT = process.env.PORT || 8000;
+var USER = process.env.DB_USER;
+var PASS = process.env.DB_PASS;
+var NAME = process.env.DB_DATA;
+
 import express from "express";
 import bodyParser from "body-parser";
 import { MongoClient } from "mongodb";
 import path from "path";
 import history from "connect-history-api-fallback";
-// const dotenv = require("dotenv");
-// dotenv.config();
 
 const app = express();
 app.use(bodyParser.json());
