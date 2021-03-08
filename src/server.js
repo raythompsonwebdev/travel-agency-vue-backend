@@ -3,8 +3,8 @@ import bodyParser from "body-parser";
 import { MongoClient } from "mongodb";
 import path from "path";
 import history from "connect-history-api-fallback";
-const dotenv = require("dotenv");
-dotenv.config();
+// const dotenv = require("dotenv");
+// dotenv.config();
 
 const app = express();
 app.use(bodyParser.json());
@@ -23,8 +23,8 @@ app.use("/images", express.static(path.join(__dirname, "../assets")));
 //get all destinations and featured holiday for home page
 app.get("/api/home", async (req, res) => {
   const client = await MongoClient.connect(
-    MONGO_USER && MONGO_PASS
-      ? `mongodb+srv://${MONGO_USER}:${MONGO_PASS}@cluster0.aqewv.mongodb.net/${MONGO_DBNAME}?retryWrites=true&w=majority`
+    USER && PASS
+      ? `mongodb+srv://${USER}:${PASS}@cluster0.aqewv.mongodb.net/${NAME}?retryWrites=true&w=majority`
       : "mongodb://localhost:27017",
     {
       useNewUrlParser: true,
@@ -34,7 +34,7 @@ app.get("/api/home", async (req, res) => {
     }
   );
 
-  const db = client.db(`${process.env.MONGO_DBNAME}` || "travelagency");
+  const db = client.db(`${process.env.NAME}` || "travelagency");
   const homepageitems = await db.collection("homePage").find({}).toArray();
   res.status(200).json(homepageitems);
   client.close();
@@ -42,8 +42,8 @@ app.get("/api/home", async (req, res) => {
 //get all best deals
 app.get("/api/bestdeals", async (req, res) => {
   const client = await MongoClient.connect(
-    process.env.MONGO_USER && process.env.MONGO_PASS
-      ? `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASS}@cluster0.aqewv.mongodb.net/${process.env.MONGO_DBNAME}?retryWrites=true&w=majority`
+    process.env.USER && process.env.PASS
+      ? `mongodb+srv://${process.env.USER}:${process.env.PASS}@cluster0.aqewv.mongodb.net/${process.env.NAME}?retryWrites=true&w=majority`
       : "mongodb://localhost:27017",
     {
       useNewUrlParser: true,
@@ -52,7 +52,7 @@ app.get("/api/bestdeals", async (req, res) => {
       password: `${process.env.LOCALHOST_PASS}`,
     }
   );
-  const db = client.db(`${process.env.MONGO_DBNAME}` || "travelagency");
+  const db = client.db(`${process.env.NAME}` || "travelagency");
   const bestdealitem = await db.collection("bestdealitems").find({}).toArray();
   res.status(200).json(bestdealitem);
   client.close();
@@ -61,8 +61,8 @@ app.get("/api/bestdeals", async (req, res) => {
 app.get("/api/bestdeals/:bestdealId", async (req, res) => {
   const { bestdealId } = req.params;
   const client = await MongoClient.connect(
-    process.env.MONGO_USER && process.env.MONGO_PASS
-      ? `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASS}@cluster0.aqewv.mongodb.net/${process.env.MONGO_DBNAME}?retryWrites=true&w=majority`
+    process.env.USER && process.env.PASS
+      ? `mongodb+srv://${process.env.USER}:${process.env.PASS}@cluster0.aqewv.mongodb.net/${process.env.NAME}?retryWrites=true&w=majority`
       : "mongodb://localhost:27017",
     {
       useNewUrlParser: true,
@@ -71,7 +71,7 @@ app.get("/api/bestdeals/:bestdealId", async (req, res) => {
       password: `${process.env.LOCALHOST_PASS}`,
     }
   );
-  const db = client.db(`${process.env.MONGO_DBNAME}` || "travelagency");
+  const db = client.db(`${process.env.NAME}` || "travelagency");
 
   const bestdealitem = await db
     .collection("bestdealitems")
@@ -86,8 +86,8 @@ app.get("/api/bestdeals/:bestdealId", async (req, res) => {
 //get all holiday packages
 app.get("/api/holidaypackages", async (req, res) => {
   const client = await MongoClient.connect(
-    process.env.MONGO_USER && process.env.MONGO_PASS
-      ? `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASS}@cluster0.aqewv.mongodb.net/${process.env.MONGO_DBNAME}?retryWrites=true&w=majority`
+    process.env.USER && process.env.PASS
+      ? `mongodb+srv://${process.env.USER}:${process.env.PASS}@cluster0.aqewv.mongodb.net/${process.env.NAME}?retryWrites=true&w=majority`
       : "mongodb://localhost:27017",
     {
       useNewUrlParser: true,
@@ -96,7 +96,7 @@ app.get("/api/holidaypackages", async (req, res) => {
       password: `${process.env.LOCALHOST_PASS}`,
     }
   );
-  const db = client.db(`${process.env.MONGO_DBNAME}` || "travelagency");
+  const db = client.db(`${process.env.NAME}` || "travelagency");
   const holidaypackageitems = await db
     .collection("holidaypackageitems")
     .find({})
@@ -108,8 +108,8 @@ app.get("/api/holidaypackages", async (req, res) => {
 app.get("/api/holidaypackages/:holidaypackageId", async (req, res) => {
   const { holidaypackageId } = req.params;
   const client = await MongoClient.connect(
-    process.env.MONGO_USER && process.env.MONGO_PASS
-      ? `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASS}@cluster0.aqewv.mongodb.net/${process.env.MONGO_DBNAME}?retryWrites=true&w=majority`
+    process.env.USER && process.env.PASS
+      ? `mongodb+srv://${process.env.USER}:${process.env.PASS}@cluster0.aqewv.mongodb.net/${process.env.NAME}?retryWrites=true&w=majority`
       : "mongodb://localhost:27017",
     {
       useNewUrlParser: true,
@@ -118,7 +118,7 @@ app.get("/api/holidaypackages/:holidaypackageId", async (req, res) => {
       password: `${process.env.LOCALHOST_PASS}`,
     }
   );
-  const db = client.db(`${process.env.MONGO_DBNAME}` || "travelagency");
+  const db = client.db(`${process.env.NAME}` || "travelagency");
   const holidaypackageitem = await db
     .collection("holidaypackageitems")
     .findOne({ id: holidaypackageId });
@@ -137,6 +137,6 @@ app.get("*", (req, res) => {
 });
 
 //add conditional to determine whether to use localhost or remote server:
-app.listen(process.env.PORT || 8000, () => {
+app.listen(PORT || 8000, () => {
   console.log(`server is listening ${process.env.PORT}`);
 });
