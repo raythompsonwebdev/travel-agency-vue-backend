@@ -21,15 +21,7 @@ app.use(history());
 const withDB = async (operations, res) => {
   try {
     const client = await MongoClient.connect(
-      process.env.DB_USER && process.env.DB_PASS
-        ? `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.aqewv.mongodb.net/${process.env.DB_NAME}?retryWrites=true&w=majority`
-        : "mongodb://localhost:27017",
-      {
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
-        user: "raythompwebdev",
-        password: "Mu!a8een1000",
-      }
+      `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.aqewv.mongodb.net/${process.env.DB_NAME}?retryWrites=true&w=majority`
     );
     const db = client.db("travelagency");
     await operations(db);
