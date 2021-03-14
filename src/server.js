@@ -1,8 +1,8 @@
 require("dotenv").config({ path: ".env" });
-var PORT = process.env.PORT || 8000;
-var USER = process.env.DB_USER;
-var PASS = process.env.DB_PASS;
-var NAME = process.env.DB_DATA;
+const PORT = process.env.PORT || 8000;
+// var USER = process.env.DB_USER;
+// var PASS = process.env.DB_PASS;
+// var NAME = process.env.DB_NAME;
 
 import express from "express";
 import bodyParser from "body-parser";
@@ -12,7 +12,6 @@ import history from "connect-history-api-fallback";
 
 const app = express();
 app.use(bodyParser.json());
-
 app.use(
   express.static(path.resolve(__dirname, "../dist"), {
     maxAge: "1y",
@@ -21,118 +20,85 @@ app.use(
 );
 app.use(history());
 
+//main connect to mongo db
+const withDB = async (operations, res) => {
+  try {
+    const client = await MongoClient.connect(
+      process.env.DB_USER && process.env.DB_PASS
+        ? `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.aqewv.mongodb.net/${process.env.DB_NAME}?retryWrites=true&w=majority`
+        : "mongodb://localhost:27017",
+      {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+        user: "raythompwebdev",
+        password: "Mu!a8een1000",
+      }
+    );
+    const db = client.db("travelagency");
+    await operations(db);
+    client.close();
+  } catch (err) {
+    res.status(500).send({ message: "Database Error", err });
+  }
+};
+
 //get static images and files
 app.use("/images", express.static(path.join(__dirname, "../assets")));
 
 //get all destinations and featured holiday for home page
 app.get("/api/home", async (req, res) => {
-  const client = await MongoClient.connect(
-    USER && PASS
-      ? `mongodb+srv://${USER}:${PASS}@cluster0.aqewv.mongodb.net/${NAME}?retryWrites=true&w=majority`
-      : "mongodb://localhost:27017",
-    {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-      user: `${process.env.LOCALHOST_USER}`,
-      password: `${process.env.LOCALHOST_PASS}`,
-    }
-  );
-
-  const db = client.db(`${process.env.NAME}` || "travelagency");
-  const homepageitems = await db.collection("homePage").find({}).toArray();
-  res.status(200).json(homepageitems);
-  client.close();
+  await withDB(async db => {
+    const homepageitems = await db.collection("homePage").find({}).toArray();
+    res.status(200).json(homepageitems); //use json instead of send
+  }, res);
 });
 //get all best deals
 app.get("/api/bestdeals", async (req, res) => {
-  const client = await MongoClient.connect(
-    process.env.USER && process.env.PASS
-      ? `mongodb+srv://${process.env.USER}:${process.env.PASS}@cluster0.aqewv.mongodb.net/${process.env.NAME}?retryWrites=true&w=majority`
-      : "mongodb://localhost:27017",
-    {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-      user: `${process.env.LOCALHOST_USER}`,
-      password: `${process.env.LOCALHOST_PASS}`,
-    }
-  );
-  const db = client.db(`${process.env.NAME}` || "travelagency");
-  const bestdealitem = await db.collection("bestdealitems").find({}).toArray();
-  res.status(200).json(bestdealitem);
-  client.close();
+  await withDB(async db => {
+    const bestdealitem = await db
+      .collection("bestdealitems")
+      .find({})
+      .toArray();
+    res.status(200).json(bestdealitem);
+  }, res);
 });
 //get single best deal
 app.get("/api/bestdeals/:bestdealId", async (req, res) => {
   const { bestdealId } = req.params;
-  const client = await MongoClient.connect(
-    process.env.USER && process.env.PASS
-      ? `mongodb+srv://${process.env.USER}:${process.env.PASS}@cluster0.aqewv.mongodb.net/${process.env.NAME}?retryWrites=true&w=majority`
-      : "mongodb://localhost:27017",
-    {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-      user: `${process.env.LOCALHOST_USER}`,
-      password: `${process.env.LOCALHOST_PASS}`,
+  await withDB(async db => {
+    const bestdealitem = await db
+      .collection("bestdealitems")
+      .findOne({ id: bestdealId });
+    if (bestdealitem) {
+      res.status(200).json(bestdealitem);
+    } else {
+      res.status(404).json("could not find bestdeal");
     }
-  );
-  const db = client.db(`${process.env.NAME}` || "travelagency");
-
-  const bestdealitem = await db
-    .collection("bestdealitems")
-    .findOne({ id: bestdealId });
-  if (bestdealitem) {
-    res.status(200).json(bestdealitem);
-  } else {
-    res.status(404).json("could not find bestdeal");
-  }
-  client.close;
+  }, res);
 });
 //get all holiday packages
 app.get("/api/holidaypackages", async (req, res) => {
-  const client = await MongoClient.connect(
-    process.env.USER && process.env.PASS
-      ? `mongodb+srv://${process.env.USER}:${process.env.PASS}@cluster0.aqewv.mongodb.net/${process.env.NAME}?retryWrites=true&w=majority`
-      : "mongodb://localhost:27017",
-    {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-      user: `${process.env.LOCALHOST_USER}`,
-      password: `${process.env.LOCALHOST_PASS}`,
-    }
-  );
-  const db = client.db(`${process.env.NAME}` || "travelagency");
-  const holidaypackageitems = await db
-    .collection("holidaypackageitems")
-    .find({})
-    .toArray();
-  res.status(200).json(holidaypackageitems);
-  client.close();
+  await withDB(async db => {
+    const holidaypackageitems = await db
+      .collection("holidaypackageitems")
+      .find({})
+      .toArray();
+    res.status(200).json(holidaypackageitems);
+  }, res);
 });
 //get single holiday package
 app.get("/api/holidaypackages/:holidaypackageId", async (req, res) => {
   const { holidaypackageId } = req.params;
-  const client = await MongoClient.connect(
-    process.env.USER && process.env.PASS
-      ? `mongodb+srv://${process.env.USER}:${process.env.PASS}@cluster0.aqewv.mongodb.net/${process.env.NAME}?retryWrites=true&w=majority`
-      : "mongodb://localhost:27017",
-    {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-      user: `${process.env.LOCALHOST_USER}`,
-      password: `${process.env.LOCALHOST_PASS}`,
+  await withDB(async db => {
+    const holidaypackageitem = await db
+      .collection("holidaypackageitems")
+      .findOne({ id: holidaypackageId });
+    if (holidaypackageitem) {
+      res.status(200).json(holidaypackageitem);
+    } else {
+      res.status(404).json("could not find holidaypackage");
     }
-  );
-  const db = client.db(`${process.env.NAME}` || "travelagency");
-  const holidaypackageitem = await db
-    .collection("holidaypackageitems")
-    .findOne({ id: holidaypackageId });
-  if (holidaypackageitem) {
-    res.status(200).json(holidaypackageitem);
-  } else {
-    res.status(404).json("could not find holidaypackage");
-  }
-
-  client.close;
+  }, res);
 });
 
 // gets all routes
@@ -141,6 +107,6 @@ app.get("*", (req, res) => {
 });
 
 //add conditional to determine whether to use localhost or remote server:
-app.listen(PORT || 8000, () => {
+app.listen(PORT, () => {
   console.log(`server is listening ${PORT}`);
 });
