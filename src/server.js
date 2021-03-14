@@ -1,8 +1,5 @@
 require("dotenv").config({ path: ".env" });
 const PORT = process.env.PORT || 8000;
-// var USER = process.env.DB_USER;
-// var PASS = process.env.DB_PASS;
-// var NAME = process.env.DB_NAME;
 
 import express from "express";
 import bodyParser from "body-parser";
