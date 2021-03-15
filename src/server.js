@@ -48,11 +48,11 @@ app.get("/api/home", async (req, res) => {
 //get all best deals
 app.get("/api/bestdeals", async (req, res) => {
   await withDB(async db => {
-    const bestdealitem = await db
+    const bestdealitems = await db
       .collection("bestdealitems")
       .find({})
       .toArray();
-    res.status(200).json(bestdealitem);
+    res.status(200).json(bestdealitems);
   }, res);
 });
 //get single best deal
