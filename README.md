@@ -1,15 +1,18 @@
 # Travel Agency API 
 
 ## backend API for Travel Agency 
-API built for travel agency web application delivers holiday pacakges information
+travel agency api deployed to heroku serving data from a mungodb database.
 
 ## Tools
 
-Express JS
-Mungo DB
-Nodemon
-Babel
-Node
+- [Express](https://expressjs.com/)
+- [MungoDB](https://www.npmjs.com/package/mongodb)
+- [BodyParser](https://www.npmjs.com/package/body-parser)
+- [NodeMon](https://www.npmjs.com/package/nodemon)
+- [DotEnv](https://www.npmjs.com/package/dotenv)
+- [Heroku](https://www.heroku.com/)
+- [babel](https://babeljs.io/)
+- [Connect History API](https://www.npmjs.com/package/connect-history-api-fallback)
 
 <!-- GETTING STARTED -->
 ## Getting Started
@@ -35,6 +38,20 @@ This is an example of how to list things you need to use the software and how to
    ```sh
    npm install
    ```
+# start server
 
+```sh
+$ npx babel-node src/server.js
+or
+$ npm run dev
+```
+
+# run server continuosly
+
+```sh
+$ node server.js
+or
+$ npm run start
+```
 
 
