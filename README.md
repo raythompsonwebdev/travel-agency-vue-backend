@@ -1,6 +1,6 @@
 # Travel Agency API 
 
-## backend API for Travel Agency 
+## API for Travel Agency Website 
 travel agency api deployed to heroku serving data from a mungodb database.
 
 ## Tools
@@ -38,7 +38,7 @@ This is an example of how to list things you need to use the software and how to
    ```sh
    npm install
    ```
-### start development server
+### Start development server
 
 ```sh
 $ npx babel-node src/server.js
@@ -46,7 +46,7 @@ or
 $ npm run dev
 ```
 
-### run production server 
+### Run production server 
 
 ```sh
 $ node server.js
