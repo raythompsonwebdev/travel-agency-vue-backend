@@ -1,7 +1,7 @@
 # Travel Agency API 
 
 ## API for Travel Agency Website 
-travel agency api deployed to heroku serving data from a mungodb database.
+travel agency api deployed to heroku serving data from a database.
 
 ## Tools
 
