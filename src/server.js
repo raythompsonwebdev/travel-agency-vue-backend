@@ -1,6 +1,6 @@
 
 
-require('dotenv').config({ path: ".env" });
+//require('dotenv').config({ path: ".env" });
 const PORT = process.env.PORT || 8000;
 import express from "express";
 import bodyParser from "body-parser";

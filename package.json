@@ -2,10 +2,7 @@
   "name": "holiday-site-vue-backend",
   "version": "1.0.0",
   "description": "travel agency web app",
-  "main": "index.js",
-  "optionalDependencies": {
-    "fsevents": "2.1.2"
-  },
+  "main": "index.js",  
   "scripts": {
     "build": "babel ./src --out-dir ./build",
     "start": "node src/server.js",
@@ -30,5 +27,8 @@
     "connect-history-api-fallback": "^1.6.0",
     "dotenv": "^14.3.2",
     "nodemon": "^2.0.15"
+  },
+  "optionalDependencies": {
+    "fsevents": "2.1.2"
   }
 }
