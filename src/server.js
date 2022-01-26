@@ -1,9 +1,7 @@
 
 
 require('dotenv').config({ path: ".env" });
-
 const PORT = process.env.PORT || 8000;
-
 import express from "express";
 import bodyParser from "body-parser";
 import { MongoClient } from "mongodb";
@@ -13,7 +11,6 @@ import history from "connect-history-api-fallback";
 const DB_USER = process.env.DB_USER;
 const DB_PASS = process.env.DB_PASS;
 const DB_NAME = process.env.DB_NAME;
-
 const app = express();
 app.use(bodyParser.json());
 app.use(
@@ -23,8 +20,6 @@ app.use(
   })
 );
 app.use(history());
-
-
 const withDB = async (operations, res) => {
   try {
     const client = await MongoClient.connect(
@@ -43,9 +38,7 @@ const withDB = async (operations, res) => {
   }
 };
 
-
 app.use("/images", express.static(path.join(__dirname, "../assets")));
-
 
 app.get("/api/home", async (req, res) => {
   await withDB(async db => {
@@ -102,11 +95,9 @@ app.get("/api/holidaypackages/:holidaypackageId", async (req, res) => {
   }, res);
 });
 
-
 app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "../dist/index.html"));
 });
-
 
 app.listen(PORT, () => {
   console.log(`server is listening ${PORT}`);
