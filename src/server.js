@@ -3,8 +3,6 @@
 require('dotenv').config();
 
 const PORT = process.env.PORT || 8000;
-//const PORT = 8000;
-
 
 import express from "express";
 import bodyParser from "body-parser";
@@ -26,7 +24,7 @@ app.use(
 );
 app.use(history());
 
-//main connect to mongo db
+
 const withDB = async (operations, res) => {
   try {
     const client = await MongoClient.connect(
@@ -45,17 +43,17 @@ const withDB = async (operations, res) => {
   }
 };
 
-//get static images and files
+
 app.use("/images", express.static(path.join(__dirname, "../assets")));
 
-//get all destinations and featured holiday for home page
+
 app.get("/api/home", async (req, res) => {
   await withDB(async db => {
     const homepageitems = await db.collection("homePage").find({}).toArray();
     res.status(200).json(homepageitems); //use json instead of send
   }, res);
 });
-//get all best deals
+
 app.get("/api/bestdeals", async (req, res) => {
   await withDB(async db => {
     const bestdealitems = await db
@@ -65,7 +63,7 @@ app.get("/api/bestdeals", async (req, res) => {
     res.status(200).json(bestdealitems);
   }, res);
 });
-//get single best deal
+
 app.get("/api/bestdeals/:bestdealId", async (req, res) => {
   const { bestdealId } = req.params;
   await withDB(async db => {
@@ -79,7 +77,7 @@ app.get("/api/bestdeals/:bestdealId", async (req, res) => {
     }
   }, res);
 });
-//get all holiday packages
+
 app.get("/api/holidaypackages", async (req, res) => {
   await withDB(async db => {
     const holidaypackageitems = await db
@@ -89,7 +87,7 @@ app.get("/api/holidaypackages", async (req, res) => {
     res.status(200).json(holidaypackageitems);
   }, res);
 });
-//get single holiday package
+
 app.get("/api/holidaypackages/:holidaypackageId", async (req, res) => {
   const { holidaypackageId } = req.params;
   await withDB(async db => {
@@ -104,12 +102,12 @@ app.get("/api/holidaypackages/:holidaypackageId", async (req, res) => {
   }, res);
 });
 
-// gets all routes
+
 app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "../dist/index.html"));
 });
 
-//add conditional to determine whether to use localhost or remote server:
+
 app.listen(PORT, () => {
   console.log(`server is listening ${PORT}`);
 });
