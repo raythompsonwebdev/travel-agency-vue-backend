@@ -12,7 +12,7 @@ import history from "connect-history-api-fallback";
 
 const DB_USER = process.env.DB_USER;
 const DB_PASS = process.env.DB_PASS;
-const DB_DATA = process.env.DB_DATA;
+const DB_NAME = process.env.DB_NAME;
 
 const app = express();
 app.use(bodyParser.json());
@@ -28,7 +28,7 @@ app.use(history());
 const withDB = async (operations, res) => {
   try {
     const client = await MongoClient.connect(
-      `mongodb+srv://${DB_USER}:${DB_PASS}@cluster0.aqewv.mongodb.net/${DB_DATA}?retryWrites=true&w=majority`,
+      `mongodb+srv://${DB_USER}:${DB_PASS}@cluster0.aqewv.mongodb.net/${DB_NAME}?retryWrites=true&w=majority`,
       //`mongodb://localhost:27017/?readPreference=primary&appname=MongoDB%20Compass&ssl=false`,
       {
         useNewUrlParser: true,
