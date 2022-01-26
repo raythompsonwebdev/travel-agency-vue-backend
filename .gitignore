@@ -3,3 +3,4 @@ node_modules
 .vscode/
 readme.txt
 dist/*
+jsconfig.json

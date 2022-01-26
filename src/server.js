@@ -1,9 +1,9 @@
 
 
-require('dotenv').config({ path: ".env" });
+require('dotenv').config();
 
-//const PORT = process.env.PORT || 8000;
-const PORT = 8000;
+const PORT = process.env.PORT || 8000;
+//const PORT = 8000;
 
 
 import express from "express";
@@ -11,6 +11,10 @@ import bodyParser from "body-parser";
 import { MongoClient } from "mongodb";
 import path from "path";
 import history from "connect-history-api-fallback";
+
+const DB_USER = process.env.DB_USER;
+const DB_PASS = process.env.DB_PASS;
+const DB_DATA = process.env.DB_DATA;
 
 const app = express();
 app.use(bodyParser.json());
@@ -26,8 +30,8 @@ app.use(history());
 const withDB = async (operations, res) => {
   try {
     const client = await MongoClient.connect(
-      // `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.aqewv.mongodb.net/${process.env.DB_NAME}?retryWrites=true&w=majority`,
-      `mongodb://localhost:27017/?readPreference=primary&appname=MongoDB%20Compass&ssl=false`,
+      `mongodb+srv://${DB_USER}:${DB_PASS}@cluster0.aqewv.mongodb.net/${DB_DATA}?retryWrites=true&w=majority`,
+      //`mongodb://localhost:27017/?readPreference=primary&appname=MongoDB%20Compass&ssl=false`,
       {
         useNewUrlParser: true,
         useUnifiedTopology: true,
