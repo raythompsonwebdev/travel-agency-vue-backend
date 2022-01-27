@@ -2,7 +2,8 @@
   "name": "holiday-site-vue-backend",
   "version": "1.0.0",
   "description": "travel agency web app",
-  "main": "index.js",  
+  "main": "index.js",
+  "type": "module",  
   "scripts": {
     "build": "babel ./src --out-dir ./build",
     "start": "node ./build/server.js",
