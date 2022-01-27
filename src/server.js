@@ -1,6 +1,6 @@
 
 
-//require('dotenv').config({ path: ".env" });
+//const dot = require('dotenv').config({ path: ".env" });
 const PORT = process.env.PORT || 8000;
 const express = require("express");
 const bodyParser = require("body-parser");
@@ -93,7 +93,7 @@ app.get("/api/holidaypackages/:holidaypackageId", async (req, res) => {
 });
 
 app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "../dist/index.html"));
+  res.sendFile(path.join(__dirname, "../build/index.html"));
 });
 
 app.listen( PORT || 8000, () => {
