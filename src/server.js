@@ -11,7 +11,7 @@ const history = require("connect-history-api-fallback");
 const app = express();
 app.use(bodyParser.json());
 app.use(
-  express.static(path.resolve(__dirname, "../dist"), {
+  express.static(path.resolve(__dirname, "../build"), {
     maxAge: "1y",
     etag: false,
   })
