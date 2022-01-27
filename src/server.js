@@ -8,9 +8,6 @@ import { MongoClient } from "mongodb";
 import path from "path";
 import history from "connect-history-api-fallback";
 
-const DB_USER = process.env.DB_USER;
-const DB_PASS = process.env.DB_PASS;
-const DB_NAME = process.env.DB_NAME;
 const app = express();
 app.use(bodyParser.json());
 app.use(
@@ -23,8 +20,8 @@ app.use(history());
 const withDB = async (operations, res) => {
   try {
     const client = await MongoClient.connect(
-      `mongodb+srv://${DB_USER}:${DB_PASS}@cluster0.aqewv.mongodb.net/${DB_NAME}?retryWrites=true&w=majority`,
-      //`mongodb://localhost:27017/?readPreference=primary&appname=MongoDB%20Compass&ssl=false`,
+      process.env.DB_USER && process.env.DB_PASS ?
+      `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.aqewv.mongodb.net/${process.env.DB_NAME}?retryWrites=true&w=majority`:`mongodb://localhost:27017/?readPreference=primary&appname=MongoDB%20Compass&ssl=false`,
       {
         useNewUrlParser: true,
         useUnifiedTopology: true,
@@ -99,6 +96,6 @@ app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "../dist/index.html"));
 });
 
-app.listen(PORT, () => {
+app.listen( PORT || 8000, () => {
   console.log(`server is listening ${PORT}`);
 });
