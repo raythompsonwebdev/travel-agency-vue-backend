@@ -2,11 +2,11 @@
 
 //require('dotenv').config({ path: ".env" });
 const PORT = process.env.PORT || 8000;
-import express from "express";
-import bodyParser from "body-parser";
-import { MongoClient } from "mongodb";
-import path from "path";
-import history from "connect-history-api-fallback";
+const express = require("express");
+const bodyParser = require("body-parser");
+const MongoClient = require("mongodb").MongoClient;
+const path = require("path");
+const history = require("connect-history-api-fallback");
 
 const app = express();
 app.use(bodyParser.json());
