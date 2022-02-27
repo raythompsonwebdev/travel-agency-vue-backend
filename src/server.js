@@ -2,11 +2,17 @@
 
 //const dot = require('dotenv').config({ path: ".env" });
 const PORT = process.env.PORT || 8000;
-const express = require("express");
-const bodyParser = require("body-parser");
-const MongoClient = require("mongodb").MongoClient;
-const path = require("path");
-const history = require("connect-history-api-fallback");
+import express from "express";
+import bodyParser from "body-parser";
+import {MongoClient} from "mongodb";
+import path from "path";
+import {fileURLToPath} from 'url';
+
+
+//set up file paths
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+import history from "connect-history-api-fallback";
 
 const app = express();
 app.use(bodyParser.json());
@@ -40,6 +46,8 @@ app.use("/images", express.static(path.join(__dirname, "../assets")));
 app.get("/api/home", async (req, res) => {
   await withDB(async db => {
     const homepageitems = await db.collection("homePage").find({}).toArray();
+    
+    
     res.status(200).json(homepageitems); //use json instead of send
   }, res);
 });
