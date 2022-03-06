@@ -41,7 +41,7 @@ const withDB = async (operations, res) => {
   }
 };
 
-app.use("/images", express.static(path.join(__dirname, "../assets")));
+app.use("/images", express.static(path.join(__dirname, "./assets")));
 
 app.get("/api/home", async (req, res) => {
   await withDB(async db => {
