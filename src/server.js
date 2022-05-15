@@ -103,12 +103,12 @@ app.get("/api/holidaypackage/:itemid", async (req, res) => {
 
 app.post('/api/contact', async (req, res) => {
 
-  //console.log(req.body);
+  console.log(req.body);
 
   const { firstname,lastname, email, phone, message } = req.body;
 
   await withDB(async db => {
-    const contacts = await db.collection("contact").save({
+    const contacts = await db.collection("contact").insertOne({
       firstname: firstname,
       lastname: lastname, 
       email : email, 
