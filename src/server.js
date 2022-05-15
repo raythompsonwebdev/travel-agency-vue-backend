@@ -101,102 +101,26 @@ app.get("/api/holidaypackage/:itemid", async (req, res) => {
   }, res);
 });
 
-// //get users cart
-// app.get('/api/users/:userId/cart', async (req, res) => {
-//   const { userId } = req.params;
-//   const client = await MongoClient.connect(
-//     process.env.DB_USER && process.env.DB_PASS ?
-//       `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.aqewv.mongodb.net/${process.env.DB_NAME}?retryWrites=true&w=majority`:`mongodb://localhost:27017/?readPreference=primary&appname=MongoDB%20Compass&ssl=false`,
-//       {
-//         useNewUrlParser: true,
-//         useUnifiedTopology: true,
-//       },
-//   );
-//   const db = client.db(process.env.MONGO_DBNAME || 'travelagency');  
-//   const user = await db.collection('users').findOne({ id: userId });
-//   if (!user) return res.status(404).json('Could not find user!');
-//   const products = await db.collection('cart').find({}).toArray();
-//   const cartItemIds = user.cartItems;
-//   const cartItems = cartItemIds.map(id =>
-//     products.find(product => product.id === id));
-//   res.status(200).json(cartItems);
-//   client.close();
-// });
-// // add to users cart
-// app.post('/api/users/:userId/cart', async (req, res) => {
-//   const { userId } = req.params;
-//   //get id of product to add to cart
-//   const { productId } = req.body;
-//   const client = await MongoClient.connect(
-//     process.env.DB_USER && process.env.DB_PASS ?
-//       `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.aqewv.mongodb.net/${process.env.DB_NAME}?retryWrites=true&w=majority`:`mongodb://localhost:27017/?readPreference=primary&appname=MongoDB%20Compass&ssl=false`,
-//       {
-//         useNewUrlParser: true,
-//         useUnifiedTopology: true,
-//       },
-//   );
-//     const db = client.db(process.env.MONGO_DBNAME || 'travelagency');
-//   await db.collection('users').updateOne({ id: userId }, {
-//     $addToSet: { cartItems: productId },
-//   });
-//   const user = await db.collection('users').findOne({ id: userId });
-//   const products = await db.collection('cart').find({}).toArray();
-//   const cartItemIds = user.cartItems;
-//   const cartItems = cartItemIds.map(id =>
-//     products.find(product => product.id === id));
-//   res.status(200).json(cartItems);
-//   client.close();
-// });
-// //delet item from cart
-// app.delete('/api/users/:userId/cart/:holidaypackageId', async (req, res) => {
-//   const { userId, productId } = req.params;
-//   const client = await MongoClient.connect(
-//     process.env.DB_USER && process.env.DB_PASS ?
-//       `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.aqewv.mongodb.net/${process.env.DB_NAME}?retryWrites=true&w=majority`:`mongodb://localhost:27017/?readPreference=primary&appname=MongoDB%20Compass&ssl=false`,
-//       {
-//         useNewUrlParser: true,
-//         useUnifiedTopology: true,
-//       },
-//   );
-//     const db = client.db(process.env.MONGO_DBNAME || 'travelagency');
+app.post('/api/contact', async (req, res) => {
 
-//   await db.collection('users').updateOne({ id: userId }, {
-//     $pull: { cartItems: productId },
-//   });
-//   const user = await db.collection('users').findOne({ id: userId });
-//   const products = await db.collection('cart').find({}).toArray();
-//   const cartItemIds = user.cartItems;
-//   const cartItems = cartItemIds.map(id =>
-//     products.find(product => product.id === id));
+  //console.log(req.body);
 
-//   res.status(200).json(cartItems);
-//   client.close();
-// });
+  const { firstname,lastname, email, phone, message } = req.body;
 
-// app.delete('/api/users/:userId/cart/:bestdealId', async (req, res) => {
-//   const { userId, productId } = req.params;
-//   const client = await MongoClient.connect(
-//     process.env.DB_USER && process.env.DB_PASS ?
-//       `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.aqewv.mongodb.net/${process.env.DB_NAME}?retryWrites=true&w=majority`:`mongodb://localhost:27017/?readPreference=primary&appname=MongoDB%20Compass&ssl=false`,
-//       {
-//         useNewUrlParser: true,
-//         useUnifiedTopology: true,
-//       },
-//   );
-//     const db = client.db(process.env.MONGO_DBNAME || 'travelagency');
-
-//   await db.collection('users').updateOne({ id: userId }, {
-//     $pull: { cartItems: productId },
-//   });
-//   const user = await db.collection('users').findOne({ id: userId });
-//   const products = await db.collection('cart').find({}).toArray();
-//   const cartItemIds = user.cartItems;
-//   const cartItems = cartItemIds.map(id =>
-//     products.find(product => product.id === id));
-
-//   res.status(200).json(cartItems);
-//   client.close();
-// });
+  await withDB(async db => {
+    const contacts = await db.collection("contact").save({
+      firstname: firstname,
+      lastname: lastname, 
+      email : email, 
+      phone: phone, 
+      message : message
+    });        
+    
+    res.status(200).json(contacts); //use json instead of send
+  }, res);
+  
+ 
+});
 
 app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "../build/index.html"));
