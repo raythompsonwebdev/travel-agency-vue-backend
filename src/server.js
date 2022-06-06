@@ -27,7 +27,7 @@ const withDB = async (operations, res) => {
   try {
     const client = await MongoClient.connect(
       process.env.DB_USER && process.env.DB_PASS ?
-      `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.aqewv.mongodb.net/${process.env.DB_NAME}?retryWrites=true&w=majority`:`mongodb://localhost:27017/?readPreference=primary&appname=MongoDB%20Compass&ssl=false`,
+      `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.aqewv.mongodb.net/${process.env.DB_NAME}?retryWrites=true&w=majority`:`mongodb://localhost:27017/?readPreference=primary&appname=MongoDB%20Compass&ssl=false`,      
       {
         useNewUrlParser: true,
         useUnifiedTopology: true,
@@ -52,7 +52,7 @@ app.get("/api/home", async (req, res) => {
     res.status(200).json(homepageitems); //use json instead of send
   }, res);
 });
-//best Deals
+//best deals
 app.get("/api/bestdeals", async (req, res) => {
   await withDB(async db => {
     const bestdealitems = await db
@@ -62,7 +62,7 @@ app.get("/api/bestdeals", async (req, res) => {
     res.status(200).json(bestdealitems);
   }, res);
 });
-
+//single best deal
 app.get("/api/bestdeal/:itemid", async (req, res) => {
   const { itemid } = req.params;
   await withDB(async db => {
@@ -86,7 +86,7 @@ app.get("/api/holidaypackages", async (req, res) => {
     res.status(200).json(holidaypackageitems);
   }, res);
 });
-
+//single holiday package
 app.get("/api/holidaypackage/:itemid", async (req, res) => {
   const { itemid } = req.params;
   await withDB(async db => {
@@ -100,7 +100,7 @@ app.get("/api/holidaypackage/:itemid", async (req, res) => {
     }
   }, res);
 });
-
+// contact page
 app.post('/api/contact', async (req, res) => {
 
   console.log(req.body);
@@ -117,8 +117,7 @@ app.post('/api/contact', async (req, res) => {
     });        
     
     res.status(200).json(contacts); //use json instead of send
-  }, res);
-  
+  }, res);  
  
 });
 
