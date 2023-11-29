@@ -16,6 +16,14 @@ import dotenv  from "dotenv";
 dotenv.config();
 
 const app = express();
+
+// set up trust proxy
+app.set('trust proxy', 1)
+
+//app.get('/ip', (request, response) => response.send(request.ip))
+//app.get('/x-forwarded-for', (request, response) => response.send(request.headers['x-forwarded-for']))
+//app.set('trust proxy', numberOfProxies)
+
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
   max: 5, // Limit each IP to 100 requests per `window` (here, per 15 minutes)
@@ -36,12 +44,7 @@ const withDB = async (operations, res) => {
     const client = await MongoClient.connect(
       process.env.DB_USER && process.env.DB_PASS
         ? `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.aqewv.mongodb.net/${process.env.DB_NAME}?retryWrites=true&w=majority`
-        : `mongodb://localhost:27017/?readPreference=primary&appname=MongoDB%20Compass&ssl=false`,
-      {
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
-      }
-    );
+        : `mongodb://localhost:27017/?readPreference=primary&appname=MongoDB%20Compass&ssl=false`);
     const db = client.db("travelagency");
     await operations(db);
     client.close();
