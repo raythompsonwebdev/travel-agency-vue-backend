@@ -3,6 +3,5 @@ node_modules
 .vscode/
 readme.txt
 jsconfig.json
-dist/
-build/
+
 
