@@ -1,1 +1,0 @@
-.fade-enter-active{animation:coming .5s;animation-delay:.5s;opacity:0}.fade-leave-active{animation:going .5s}@keyframes coming{0%{transform:translateX(-200px);opacity:0}to{transform:translateX(0);opacity:1}}@keyframes going{0%{transform:translateX(0)}to{transform:translateX(-200px);opacity:0}}

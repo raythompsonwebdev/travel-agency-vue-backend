@@ -11,14 +11,14 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 import history from "connect-history-api-fallback";
 
-import dotenv  from "dotenv";
+import dotenv from "dotenv";
 
 dotenv.config();
 
 const app = express();
 
 // set up trust proxy
-app.set('trust proxy', 1)
+app.set("trust proxy", 1);
 
 //app.get('/ip', (request, response) => response.send(request.ip))
 //app.get('/x-forwarded-for', (request, response) => response.send(request.headers['x-forwarded-for']))
@@ -44,7 +44,8 @@ const withDB = async (operations, res) => {
     const client = await MongoClient.connect(
       process.env.DB_USER && process.env.DB_PASS
         ? `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.aqewv.mongodb.net/${process.env.DB_NAME}?retryWrites=true&w=majority`
-        : `mongodb://localhost:27017/?readPreference=primary&appname=MongoDB%20Compass&ssl=false`);
+        : `mongodb://localhost:27017/?readPreference=primary&appname=MongoDB%20Compass&ssl=false`
+    );
     const db = client.db("travelagency");
     await operations(db);
     client.close();
@@ -113,8 +114,6 @@ app.get("/api/holidaypackage/:itemid", async (req, res) => {
 });
 // contact page
 app.post("/api/contact", async (req, res) => {
-  console.log(req.body);
-
   const { firstname, lastname, email, phone, message } = req.body;
 
   await withDB(async (db) => {
@@ -131,7 +130,7 @@ app.post("/api/contact", async (req, res) => {
 });
 
 app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "../dist/index.html"));
+  res.sendFile(path.join(__dirname, "../public/index.html"));
 });
 
 app.listen(PORT || 8000, () => {
