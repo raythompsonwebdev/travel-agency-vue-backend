@@ -1,25 +1,23 @@
-const PORT = process.env.PORT || 8000;
 import express from "express";
 import bodyParser from "body-parser";
 import { MongoClient } from "mongodb";
 import path from "path";
 import { fileURLToPath } from "url";
 import rateLimit from "express-rate-limit";
-
 //set up file paths
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 import history from "connect-history-api-fallback";
-
 import dotenv from "dotenv";
 
 dotenv.config();
+
+const PORT = process.env.PORT || 8000;
 
 const app = express();
 
 // set up trust proxy
 app.set("trust proxy", 1);
-
 // app.get("/ip", (request, response) => response.send(request.ip));
 // app.get("/x-forwarded-for", (request, response) =>
 //   response.send(request.headers["x-forwarded-for"])
@@ -135,6 +133,6 @@ app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname + "/build/index.html"));
 });
 
-app.listen(PORT || 8000, () => {
+app.listen(PORT, () => {
   console.log(`server is listening ${PORT}`);
 });
