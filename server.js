@@ -20,24 +20,24 @@ const app = express();
 // set up trust proxy
 app.set("trust proxy", 1);
 
-//app.get('/ip', (request, response) => response.send(request.ip))
-//app.get('/x-forwarded-for', (request, response) => response.send(request.headers['x-forwarded-for']))
-//app.set('trust proxy', numberOfProxies)
+// app.get("/ip", (request, response) => response.send(request.ip));
+// app.get("/x-forwarded-for", (request, response) =>
+//   response.send(request.headers["x-forwarded-for"])
+// );
+//app.set("trust proxy", numberOfProxies);
 
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 5, // Limit each IP to 100 requests per `window` (here, per 15 minutes)
+  limit: 100, // Limit each IP to 100 requests per `window` (here, per 15 minutes).
+  standardHeaders: "draft-7", // draft-6: `RateLimit-*` headers; draft-7: combined `RateLimit` header
+  legacyHeaders: false, // Disable the `X-RateLimit-*` headers.
+  // store: ... , // Use an external store for consistency across multiple server instances.
 });
 
 // Apply the rate limiting middleware to all requests
 app.use(limiter);
 app.use(bodyParser.json());
-app.use(
-  express.static(path.resolve(__dirname, "../dist"), {
-    maxAge: "1y",
-    etag: false,
-  })
-);
+app.use(express.static(path.join(__dirname, "/build")));
 app.use(history());
 const withDB = async (operations, res) => {
   try {
@@ -54,7 +54,7 @@ const withDB = async (operations, res) => {
   }
 };
 
-app.use("/images", express.static(path.join(__dirname, "./assets")));
+app.use("/img", express.static(path.join(__dirname, "/assets")));
 
 //home page
 app.get("/api/home", async (req, res) => {
@@ -114,6 +114,8 @@ app.get("/api/holidaypackage/:itemid", async (req, res) => {
 });
 // contact page
 app.post("/api/contact", async (req, res) => {
+  console.log(req.body);
+
   const { firstname, lastname, email, phone, message } = req.body;
 
   await withDB(async (db) => {
@@ -130,7 +132,7 @@ app.post("/api/contact", async (req, res) => {
 });
 
 app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "../public/index.html"));
+  res.sendFile(path.join(__dirname + "/build/index.html"));
 });
 
 app.listen(PORT || 8000, () => {

@@ -3,6 +3,8 @@ node_modules
 .vscode/
 readme.txt
 jsconfig.json
-public/
+
+build/
+
 
 

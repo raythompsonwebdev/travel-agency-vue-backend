@@ -5,16 +5,15 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "build": "babel ./src --out-dir ./dist",
-    "start": "node ./src/server.js",
-    "dev": "npx nodemon --exec babel-node src/server.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "babel ./src --out-dir ./build",
+    "start": "node server.js",
+    "dev": "npx nodemon --exec babel-node server.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@babel/runtime": "^7.23.4",
+    "@babel/runtime": "^7.23.8",
     "body-parser": "^1.20.2",
     "express": "^4.18.2",
     "express-rate-limit": "^7.1.5",
@@ -22,13 +21,13 @@
   },
   "devDependencies": {
     "@babel/cli": "^7.23.4",
-    "@babel/core": "^7.23.3",
+    "@babel/core": "^7.23.7",
     "@babel/node": "^7.22.19",
-    "@babel/plugin-transform-runtime": "^7.23.4",
-    "@babel/preset-env": "^7.23.3",
+    "@babel/plugin-transform-runtime": "^7.23.7",
+    "@babel/preset-env": "^7.23.8",
     "connect-history-api-fallback": "^2.0.0",
     "dotenv": "^16.3.1",
-    "nodemon": "^3.0.1"
+    "nodemon": "^3.0.3"
   },
   "optionalDependencies": {
     "fsevents": "2.3.3"
