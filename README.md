@@ -1,8 +1,10 @@
 # Travel Agency API
 
-## API for Travel Agency Website
+## Description
 
-travel agency api deployed to heroku serving data from a database.
+Backend for Travel Agency Web application based on photoshop website template design downloaded from website [php.jabber.com](https://www.phpjabbers.com/).
+
+Built using Node and Express ,this web application makes API requests to a MungoDB database .
 
 ## Tools
 
@@ -44,8 +46,6 @@ This is an example of how to list things you need to use the software and how to
 ### Start development server
 
 ```sh
-$ npx babel-node src/server.js
-or
 $ npm run dev
 ```
 
