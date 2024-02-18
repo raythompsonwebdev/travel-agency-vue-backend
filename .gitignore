@@ -6,5 +6,9 @@ jsconfig.json
 
 build/
 
+src/dbConnect.js
+src/controllers
+models/
+
 
 
