@@ -29,57 +29,71 @@ const routes = (app) => {
     }, res);
   });
   //best deals
-  app
-    .get("/api/bestdeals", async (req, res) => {
-      await withDB(async (db) => {
-        const bestdealitems = await db
-          .collection("bestDeals")
-          .find({})
-          .toArray();
-        res.status(200).json(bestdealitems);
-      }, res);
-    })
-    //single best deal
-    .get("/api/bestdeal/:itemid", async (req, res) => {
-      const { itemid } = req.params;
-      await withDB(async (db) => {
-        const bestdealitem = await db
-          .collection("bestDeals")
-          .findOne({ id: itemid });
-        if (bestdealitem) {
-          res.status(200).json(bestdealitem);
-        } else {
-          res.status(404).json("could not find bestdeal");
-        }
-      }, res);
-    });
-
+  app.get("/api/bestdeals", async (req, res) => {
+    await withDB(async (db) => {
+      const bestdealitems = await db.collection("bestDeals").find({}).toArray();
+      res.status(200).json(bestdealitems);
+    }, res);
+  });
+  //single best deal
+  app.get("/api/bestdeal/:itemid", async (req, res) => {
+    const { itemid } = req.params;
+    await withDB(async (db) => {
+      const bestdealitem = await db
+        .collection("bestDeals")
+        .findOne({ id: itemid });
+      if (bestdealitem) {
+        res.status(200).json(bestdealitem);
+      } else {
+        res.status(404).json("could not find bestdeal");
+      }
+    }, res);
+  });
   //holiday packages
-  app
-    .get("/api/holidaypackages", async (req, res) => {
-      await withDB(async (db) => {
-        const holidaypackageitems = await db
-          .collection("holidayPackages")
-          .find({})
-          .toArray();
-        res.status(200).json(holidaypackageitems);
-      }, res);
-    })
-    //single holiday package
-    .get("/api/holidaypackage/:itemid", async (req, res) => {
-      const { itemid } = req.params;
-      await withDB(async (db) => {
-        const holidaypackageitem = await db
-          .collection("holidayPackages")
-          .findOne({ id: itemid });
-        if (holidaypackageitem) {
-          res.status(200).json(holidaypackageitem);
-        } else {
-          res.status(404).json("could not find holidaypackage");
-        }
-      }, res);
-    });
+  app.get("/api/holidaypackages", async (req, res) => {
+    await withDB(async (db) => {
+      const holidaypackageitems = await db
+        .collection("holidayPackages")
+        .find({})
+        .toArray();
+      res.status(200).json(holidaypackageitems);
+    }, res);
+  });
+  //single holiday package
+  app.get("/api/holidaypackage/:itemid", async (req, res) => {
+    const { itemid } = req.params;
+    await withDB(async (db) => {
+      const holidaypackageitem = await db
+        .collection("holidayPackages")
+        .findOne({ id: itemid });
 
+      if (holidaypackageitem) {
+        res.status(200).json(holidaypackageitem);
+      } else {
+        res.status(404).json("could not find holidaypackage");
+      }
+    }, res);
+  });
+  //searchform
+  app.get("/api/searchform", async (req, res) => {
+    await withDB(async (db) => {
+      const searchformitems = await db
+        .collection("searchForm")
+        .find({})
+        .toArray();
+      res.status(200).json(searchformitems); //use json instead of send
+    }, res);
+  });
+  //searchform
+  app.get("/api/languages", async (req, res) => {
+    await withDB(async (db) => {
+      const languageselectitems = await db
+        .collection("languageSelect")
+        .find({})
+        .toArray();
+      res.status(200).json(languageselectitems); //use json instead of send
+    }, res);
+  });
   // contact page
   app.post("/api/contact", async (req, res) => {
     console.log(req.body);
