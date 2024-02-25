@@ -2,12 +2,12 @@
   "name": "holiday-site-vue-backend",
   "version": "1.0.0",
   "description": "travel agency web app",
-  "main": "index.js",
+  "main": "src/server.js",
   "type": "module",
   "scripts": {
     "build": "babel ./src --out-dir ./build",
-    "start": "node server.js",
-    "dev": "npx nodemon --exec babel-node server.js"
+    "start": "node ./src/server.js",
+    "dev": "npx nodemon --exec babel-node ./src/server.js"
   },
   "keywords": [],
   "author": "",

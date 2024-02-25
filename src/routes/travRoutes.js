@@ -1,6 +1,182 @@
 import { MongoClient } from "mongodb";
 import "dotenv/config";
 
+let products = [
+  {
+    _id: {
+      $oid: "65d184c84ae0d8bc04afa855",
+    },
+    id: "1",
+    url: "/assets/img/travel-agency-website-tower-of-london-image.jpg",
+    title: "Lorem ipsum dolor sit amet.",
+    price: "$399 - $499",
+    month: "june",
+    season: "summer",
+    text: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Enim odit dolor sequi voluptatem esse doloribus libero commodi ea debitis.",
+    location: "london",
+    rating: "two",
+  },
+  {
+    _id: {
+      $oid: "65d184c84ae0d8bc04afa856",
+    },
+    id: "2",
+    url: "/assets/img/travel-agency-website-dubai-image.jpg",
+    title: "Lorem ipsum dolor sit amet.",
+    price: "$399 - $499",
+    month: "november",
+    season: "winter",
+    text: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Enim odit dolor sequi voluptatem esse doloribus libero commodi ea debitis.",
+    location: "dubai",
+    rating: "five",
+  },
+  {
+    _id: {
+      $oid: "65d184c84ae0d8bc04afa857",
+    },
+    id: "3",
+    url: "/assets/img/travel-agency-website-gold-coast-image.jpg",
+    title: "Lorem ipsum dolor sit amet.",
+    price: "$699 - $999",
+    month: "may",
+    season: "spring",
+    text: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Enim odit dolor sequi voluptatem esse doloribus libero commodi ea debitis.",
+    location: "goldcoast",
+    rating: "five",
+  },
+  {
+    _id: {
+      $oid: "65d184c84ae0d8bc04afa858",
+    },
+    id: "4",
+    url: "/assets/img/travel-agency-website-singapore-image.jpg",
+    title: "Lorem ipsum dolor sit amet.",
+    price: "$699 - $999",
+    month: "september",
+    season: "autumn",
+    text: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Enim odit dolor sequi voluptatem esse doloribus libero commodi ea debitis.",
+    location: "singapore",
+    rating: "four",
+  },
+  {
+    _id: {
+      $oid: "65d184c84ae0d8bc04afa859",
+    },
+    id: "5",
+    url: "/assets/img/travel-agency-website-toronto-image.jpg",
+    title: "Lorem ipsum dolor sit amet.",
+    price: "$499 - $599",
+    month: "august",
+    season: "autumn",
+    text: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Enim odit dolor sequi voluptatem esse doloribus libero commodi ea debitis.",
+    location: "toronto",
+    rating: "three",
+  },
+  {
+    _id: {
+      $oid: "65d184c84ae0d8bc04afa85a",
+    },
+    id: "6",
+    url: "/assets/img/travel-agency-website-taj-mahal-image.jpg",
+    title: "Lorem ipsum dolor sit amet.",
+    price: "$999 +",
+    month: "april",
+    season: "spring",
+    text: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Enim odit dolor sequi voluptatem esse doloribus libero commodi ea debitis.",
+    location: "tajmahal",
+    rating: "one",
+  },
+  {
+    _id: {
+      $oid: "65d184c84ae0d8bc04afa85b",
+    },
+    id: "7",
+    url: "/assets/img/travel-agency-website-spanish-villa-image.jpg",
+    title: "Lorem ipsum dolor sit amet.",
+    price: "$599 - $699",
+    month: "june",
+    season: "summer",
+    text: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Enim odit dolor sequi voluptatem esse doloribus libero commodi ea debitis.",
+    location: "madrid",
+    rating: "two",
+  },
+  {
+    _id: {
+      $oid: "65d184c84ae0d8bc04afa85c",
+    },
+    id: "8",
+    url: "/assets/img/travel-agency-website-eiffel-tower-image.jpg",
+    title: "Lorem ipsum dolor sit amet.",
+    price: "$499 - $599",
+    month: "july",
+    season: "summer",
+    text: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Enim odit dolor sequi voluptatem esse doloribus libero commodi ea debitis.",
+    location: "paris",
+    rating: "four",
+  },
+  {
+    _id: {
+      $oid: "65d79d3586063a089a9806db",
+    },
+    id: "9",
+    url: "/assets/img/travel-agency-website-rome-image.jpg",
+    title: "Lorem ipsum dolor sit amet.",
+    price: "$799 - $999",
+    month: "July",
+    season: "summer",
+    text: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Enim odit dolor sequi voluptatem esse doloribus libero commodi ea debitis.",
+    location: "rome",
+    rating: "three",
+  },
+];
+
+// let cartItems = [
+//   {
+//     _id: {
+//       $oid: "65d184c84ae0d8bc04afa855",
+//     },
+//     id: "1",
+//     url: "/assets/img/travel-agency-website-tower-of-london-image.jpg",
+//     title: "Lorem ipsum dolor sit amet.",
+//     price: "$399 - $499",
+//     month: "june",
+//     season: "summer",
+//     text: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Enim odit dolor sequi voluptatem esse doloribus libero commodi ea debitis.",
+//     location: "london",
+//     rating: "two",
+//   },
+//   {
+//     _id: {
+//       $oid: "65d184c84ae0d8bc04afa856",
+//     },
+//     id: "2",
+//     url: "/assets/img/travel-agency-website-dubai-image.jpg",
+//     title: "Lorem ipsum dolor sit amet.",
+//     price: "$399 - $499",
+//     month: "november",
+//     season: "winter",
+//     text: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Enim odit dolor sequi voluptatem esse doloribus libero commodi ea debitis.",
+//     location: "dubai",
+//     rating: "five",
+//   },
+//   {
+//     _id: {
+//       $oid: "65d184c84ae0d8bc04afa857",
+//     },
+//     id: "3",
+//     url: "/assets/img/travel-agency-website-gold-coast-image.jpg",
+//     title: "Lorem ipsum dolor sit amet.",
+//     price: "$699 - $999",
+//     month: "may",
+//     season: "spring",
+//     text: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Enim odit dolor sequi voluptatem esse doloribus libero commodi ea debitis.",
+//     location: "goldcoast",
+//     rating: "five",
+//   },
+// ];
+
+let cartItems = ["1", "2", "4", "6"];
+
 const withDB = async (operations, res) => {
   try {
     // const client = await MongoClient.connect(
@@ -19,6 +195,10 @@ const withDB = async (operations, res) => {
     res.status(500).send({ message: "Database Error", err });
   }
 };
+
+function populateCartIds(ids) {
+  return ids.map((id) => products.find((product) => product.id === id));
+}
 
 const routes = (app) => {
   //home page
@@ -111,6 +291,25 @@ const routes = (app) => {
 
       res.status(200).json(contacts); //use json instead of send
     }, res);
+  });
+
+  app.get("/api/cart", (req, res) => {
+    const cartResults = populateCartIds(cartItems);
+    res.json(cartResults);
+  });
+
+  app.post("/api/cart", (req, res) => {
+    const productId = req.body.id;
+    cartItems.push(productId);
+    const cartResults = populateCartIds(cartItems);
+    res.json(cartResults);
+  });
+
+  app.delete("/api/cart/:productId", (req, res) => {
+    const productId = req.params.productId;
+    cartItems = cartItems.filter((id) => id !== productId);
+    const cartResults = populateCartIds(cartItems);
+    res.json(cartResults);
   });
 };
 

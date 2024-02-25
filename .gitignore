@@ -8,6 +8,7 @@ build/
 
 src/dbConnect.js
 src/controllers
+src/data
 models/
 
 
