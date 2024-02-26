@@ -105,7 +105,7 @@ const routes = (app) => {
     const db = client.db("TravelAgency");
     const user = await db
       .collection("users")
-      .findOne({ userId: req.params.userId });
+      .findOne({ id: req.params.userId });
     const cartResults = await populateCartIds(user.cartItems);
     res.status(200).json(cartResults);
   });
@@ -116,9 +116,8 @@ const routes = (app) => {
     await db
       .collection("users")
       .updateOne({ id: userId }, { $addToSet: { cartItems: productId } });
-    const user = await db
-      .collection("users")
-      .findOne({ id: req.params.userId });
+    const user = await db.collection("users").findOne({ id: userId });
+
     const cartResults = populateCartIds(user.cartItems);
     res.json(cartResults);
   });
