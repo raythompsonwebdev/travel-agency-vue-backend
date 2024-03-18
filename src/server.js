@@ -13,6 +13,9 @@ const __dirname = path.dirname(__filename);
 //routes
 import routes from "./routes/travRoutes.js";
 
+const app = express();
+app.use(express.json());
+
 // Apply the rate limiting middleware to all requests
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
@@ -21,9 +24,6 @@ const limiter = rateLimit({
   legacyHeaders: false, // Disable the `X-RateLimit-*` headers.
   // store: ... , // Use an external store for consistency across multiple server instances.
 });
-
-const app = express();
-app.use(express.json());
 
 routes(app);
 
@@ -42,9 +42,9 @@ app.use(history());
 
 app.use(express.static(path.join(__dirname, "/build")));
 
-// app.get("*", (req, res) => {
-//   res.sendFile(path.join(__dirname + "/build"));
-// });
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname + "/build"));
+});
 
 app.listen(8000, () => {
   console.log("server is listening on PORT: 8000");

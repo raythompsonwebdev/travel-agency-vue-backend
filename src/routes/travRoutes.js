@@ -1,11 +1,41 @@
-import { MongoClient } from "mongodb";
+import { MongoClient, ServerApiVersion } from "mongodb";
 import "dotenv/config";
 
-const url =
-  "mongodb://127.0.0.1:27017/?directConnection=true&serverSelectionTimeoutMS=2000&appName=mongosh+2.1.4";
-const client = new MongoClient(url);
+const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.aqewv.mongodb.net/${process.env.DB_NAME}?retryWrites=true&w=majority&appName=Cluster0`;
+
+// const uri =
+//  "mongodb://127.0.0.1:27017/?directConnection=true&serverSelectionTimeoutMS=2000&appName=mongosh+2.1.4";
+
+const client = new MongoClient(uri, {
+  serverApi: {
+    version: ServerApiVersion.v1,
+    strict: true,
+    deprecationErrors: true,
+  },
+});
+
+// async function run() {
+//   try {
+//     // Connect the client to the server	(optional starting in v4.7)
+
+//     await client.connect();
+//     // Send a ping to confirm a successful connection
+//     await client.db("admin").command({ ping: 1 });
+//     console.log(
+//       "Pinged your deployment. You successfully connected to MongoDB!"
+//     );
+//   } finally {
+//     // Ensures that the client will close when you finish/error
+//     await client.close();
+//   }
+// }
+// run().catch(console.dir);
+
 await client.connect();
-const db = client.db("TravelAgency");
+// const db = client.db("travelagency");
+// Send a ping to confirm a successful connection
+await client.db("admin").command({ ping: 1 });
+console.log("Pinged your deployment. You successfully connected to MongoDB!");
 
 async function populateCartIds(ids) {
   return Promise.all(
@@ -14,6 +44,7 @@ async function populateCartIds(ids) {
 }
 
 const routes = (app) => {
+  const db = client.db("travelagency");
   //home page
   app.get("/api/home", async (req, res) => {
     const homepageitems = await db.collection("homePage").find({}).toArray();
@@ -26,7 +57,6 @@ const routes = (app) => {
   });
   //single best deal
   app.get("/api/bestdeal/:itemid", async (req, res) => {
-    const db = client.db("TravelAgency");
     const { itemid } = req.params;
 
     const bestdealitem = await db
@@ -40,8 +70,6 @@ const routes = (app) => {
   });
   //holiday packages
   app.get("/api/holidaypackages", async (req, res) => {
-    const db = client.db("TravelAgency");
-
     const holidaypackageitems = await db
       .collection("holidayPackages")
       .find({})
@@ -50,7 +78,6 @@ const routes = (app) => {
   });
   //single holiday package
   app.get("/api/holidaypackage/:itemid", async (req, res) => {
-    const db = client.db("TravelAgency");
     const { itemid } = req.params;
 
     const holidaypackageitem = await db
@@ -65,8 +92,6 @@ const routes = (app) => {
   });
   //searchform
   app.get("/api/searchform", async (req, res) => {
-    const db = client.db("TravelAgency");
-
     const searchformitems = await db
       .collection("searchForm")
       .find({})
@@ -75,17 +100,14 @@ const routes = (app) => {
   });
   //language select
   app.get("/api/languages", async (req, res) => {
-    const db = client.db("TravelAgency");
-
     const languageselectitems = await db
-      .collection("languageSelect")
+      .collection("languageItems")
       .find({})
       .toArray();
     res.status(200).json(languageselectitems); //use json instead of send
   });
   // contact page
   app.post("/api/contact", async (req, res) => {
-    const db = client.db("TravelAgency");
     console.log(req.body);
 
     const { firstname, lastname, email, phone, message } = req.body;
@@ -102,7 +124,6 @@ const routes = (app) => {
   });
   // user cart
   app.get("/api/users/:userId/cart", async (req, res) => {
-    const db = client.db("TravelAgency");
     const user = await db
       .collection("users")
       .findOne({ id: req.params.userId });
