@@ -1,10 +1,9 @@
 import { MongoClient, ServerApiVersion } from "mongodb";
 import "dotenv/config";
 
-const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.aqewv.mongodb.net/${process.env.DB_NAME}?retryWrites=true&w=majority&appName=Cluster0`;
+// const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.aqewv.mongodb.net/${process.env.DB_NAME}?retryWrites=true&w=majority&appName=Cluster0`;
 
-// const uri =
-//  "mongodb://127.0.0.1:27017/?directConnection=true&serverSelectionTimeoutMS=2000&appName=mongosh+2.1.4";
+const uri = `mongodb://127.0.0.1:27017/${process.env.DB_NAME}`;
 
 const client = new MongoClient(uri, {
   serverApi: {
@@ -32,10 +31,11 @@ const client = new MongoClient(uri, {
 // run().catch(console.dir);
 
 await client.connect();
-// const db = client.db("travelagency");
 // Send a ping to confirm a successful connection
 await client.db("admin").command({ ping: 1 });
 console.log("Pinged your deployment. You successfully connected to MongoDB!");
+
+const db = client.db("travelagency");
 
 async function populateCartIds(ids) {
   return Promise.all(
@@ -44,7 +44,6 @@ async function populateCartIds(ids) {
 }
 
 const routes = (app) => {
-  const db = client.db("travelagency");
   //home page
   app.get("/api/home", async (req, res) => {
     const homepageitems = await db.collection("homePage").find({}).toArray();
@@ -71,7 +70,7 @@ const routes = (app) => {
   //holiday packages
   app.get("/api/holidaypackages", async (req, res) => {
     const holidaypackageitems = await db
-      .collection("holidayPackages")
+      .collection("products")
       .find({})
       .toArray();
     res.status(200).json(holidaypackageitems);
@@ -81,7 +80,7 @@ const routes = (app) => {
     const { itemid } = req.params;
 
     const holidaypackageitem = await db
-      .collection("holidayPackages")
+      .collection("products")
       .findOne({ id: itemid });
 
     if (holidaypackageitem) {
@@ -122,28 +121,42 @@ const routes = (app) => {
 
     res.status(200).json(contacts); //use json instead of send
   });
-  // user cart
+
   app.get("/api/users/:userId/cart", async (req, res) => {
     const user = await db
       .collection("users")
       .findOne({ id: req.params.userId });
-    const cartResults = await populateCartIds(user.cartItems);
-    res.status(200).json(cartResults);
+
+    console.log(user);
+    const populatedCart = await populateCartIds(user.cartItems);
+    res.json(populatedCart);
   });
-  //add to cart
+
+  // app.get("/api/products/:productId", async (req, res) => {
+  //   const productId = req.params.productId;
+  //   const product = await db.collection("products").findOne({ id: productId });
+  //   res.json(product);
+  // });
+
   app.post("/api/users/:userId/cart", async (req, res) => {
     const userId = req.params.userId;
     const productId = req.body.id;
-    await db
-      .collection("users")
-      .updateOne({ id: userId }, { $addToSet: { cartItems: productId } });
-    const user = await db.collection("users").findOne({ id: userId });
 
-    const cartResults = populateCartIds(user.cartItems);
-    res.json(cartResults);
+    await db.collection("users").updateOne(
+      { id: userId },
+      {
+        $addToSet: { cartItems: productId },
+      }
+    );
+
+    const user = await db
+      .collection("users")
+      .findOne({ id: req.params.userId });
+    const populatedCart = await populateCartIds(user.cartItems);
+    res.json(populatedCart);
   });
-  // remove from cart
-  app.delete("/api//users/:userId/cart/:productId", async (req, res) => {
+
+  app.delete("/api/users/:userId/cart/:productId", async (req, res) => {
     const userId = req.params.userId;
     const productId = req.params.productId;
 
@@ -157,8 +170,8 @@ const routes = (app) => {
     const user = await db
       .collection("users")
       .findOne({ id: req.params.userId });
-    const cartResults = await populateCartIds(user.cartItems);
-    res.json(cartResults);
+    const populatedCart = await populateCartIds(user.cartItems);
+    res.json(populatedCart);
   });
 };
 
