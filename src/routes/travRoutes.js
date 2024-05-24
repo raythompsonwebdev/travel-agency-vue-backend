@@ -27,14 +27,9 @@ async function populateCartIds(ids) {
 }
 
 const routes = (app) => {
-  //home page
-  app.get("/api/home", async (req, res) => {
-    const homepageitems = await db.collection("homePage").find({}).toArray();
-    res.status(200).json(homepageitems); //use json instead of send
-  });
   //best deals
   app.get("/api/bestdeals", async (req, res) => {
-    const bestdealitems = await db.collection("bestDeals").find({}).toArray();
+    const bestdealitems = await db.collection("products").find({}).toArray();
     res.status(200).json(bestdealitems);
   });
   //single best deal
@@ -42,7 +37,7 @@ const routes = (app) => {
     const { itemid } = req.params;
 
     const bestdealitem = await db
-      .collection("bestDeals")
+      .collection("products")
       .findOne({ id: itemid });
     if (bestdealitem) {
       res.status(200).json(bestdealitem);
@@ -74,35 +69,25 @@ const routes = (app) => {
   });
   //searchform
   app.get("/api/searchform", async (req, res) => {
-    const searchformitems = await db
-      .collection("searchForm")
-      .find({})
-      .toArray();
-    res.status(200).json(searchformitems); //use json instead of send
-  });
-  //language select
-  app.get("/api/languages", async (req, res) => {
-    const languageselectitems = await db
-      .collection("languageItems")
-      .find({})
-      .toArray();
-    res.status(200).json(languageselectitems); //use json instead of send
+    console.log(req);
+    //const searchformitems = await db.collection("products").find({}).toArray();
+    res.status(200).json({ test: "test" }); //use json instead of send
   });
   // contact page
   app.post("/api/contact", async (req, res) => {
     console.log(req.body);
 
-    const { firstname, lastname, email, phone, message } = req.body;
+    // const { firstname, lastname, email, phone, message } = req.body;
 
-    const contacts = await db.collection("contact").insertOne({
-      firstname: firstname,
-      lastname: lastname,
-      email: email,
-      phone: phone,
-      message: message,
-    });
+    // const contacts = await db.collection("contact").insertOne({
+    //   firstname: firstname,
+    //   lastname: lastname,
+    //   email: email,
+    //   phone: phone,
+    //   message: message,
+    // });
 
-    res.status(200).json(contacts); //use json instead of send
+    // res.status(200).json(contacts); //use json instead of send
   });
 
   app.get("/api/users/:userId/cart", async (req, res) => {
@@ -110,16 +95,9 @@ const routes = (app) => {
       .collection("users")
       .findOne({ id: req.params.userId });
 
-    console.log(user);
     const populatedCart = await populateCartIds(user.cartItems);
     res.json(populatedCart);
   });
-
-  // app.get("/api/products/:productId", async (req, res) => {
-  //   const productId = req.params.productId;
-  //   const product = await db.collection("products").findOne({ id: productId });
-  //   res.json(product);
-  // });
 
   app.post("/api/users/:userId/cart", async (req, res) => {
     const userId = req.params.userId;
