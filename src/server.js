@@ -9,12 +9,14 @@ import "dotenv/config";
 import { fileURLToPath } from "url";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-
 //routes
 import routes from "./routes/travRoutes.js";
 
 const app = express();
 app.use(express.json());
+
+// add helmet
+app.use(helmet());
 
 // Apply the rate limiting middleware to all requests
 const limiter = rateLimit({
@@ -25,20 +27,17 @@ const limiter = rateLimit({
   // store: ... , // Use an external store for consistency across multiple server instances.
 });
 
-routes(app);
+app.use(limiter);
 
 app.set("trust proxy", 1);
-
-// add helmet
-app.use(helmet());
-
-app.use(limiter);
 
 // bodyparser setup
 app.use(bodyParser.urlencoded({ extended: true }));
 
 // history
 app.use(history());
+
+routes(app);
 
 app.use(express.static(path.join(__dirname, "/build")));
 
