@@ -69,7 +69,7 @@ const routes = (app) => {
   });
   //searchform
   app.get("/api/searchform", async (req, res) => {
-    console.log(req);
+    // console.log(req);
     //const searchformitems = await db.collection("products").find({}).toArray();
     res.status(200).json({ test: "test" }); //use json instead of send
   });
